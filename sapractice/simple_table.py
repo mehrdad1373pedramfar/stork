@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, query, aliased
 
 from sapractice.config import base, create_session, metadata
 
@@ -65,3 +65,24 @@ if __name__ == '__main__':
     user.habits[2] = Habit(title="tea", reward="another reward")
     print(user.habits)
     session.commit()
+
+    result = session.query(User).join(Habit).filter(Habit.title == 'tea').all()
+    print(result)
+
+    # result = query.join(Habit, User.id == Habit.user_id)
+    # print(result)
+    # --------------------------
+    first_habit_alias = aliased(Habit)
+    second_habit_alias = aliased(Habit)
+    for user, habit1, habit2 in session.query(
+            User.name, first_habit_alias.title, second_habit_alias.title
+    ).join(
+        first_habit_alias, User.habits
+    ).join(
+        second_habit_alias, User.habits
+    ).filter(
+        first_habit_alias.title == 'tea'
+    ).filter(
+        second_habit_alias.title == 'smoking'
+    ):
+        print(user, habit1, habit2)
