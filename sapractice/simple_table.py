@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 from sapractice.config import base, create_session, metadata
 
@@ -9,8 +10,25 @@ class User(base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
+    habits = relationship('Habit', back_populates='user')
+
     def __repr__(self):
         return self.name
+
+
+class Habit(base):
+    __tablename__ = 'habits'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    reward = Column(String)
+
+    user = relationship('User', back_populates='habits')
+
+    user_id = Column(Integer, ForeignKey(User.id))
+
+    def __repr__(self):
+        return self.title
 
 
 if __name__ == '__main__':
@@ -28,8 +46,22 @@ if __name__ == '__main__':
     for u in session.query(User):
         print(u)
 
-    user = session.query(User).filter_by(name='User1').first()
-    print(user)
+    # user = session.query(User).filter_by(name='mhr').one()
+    # print(user)
 
-    for u in session.query(User).filter(User.name.in_(['User1', 'User2'])):
+    for u in session.query(User).filter(User.name.in_(['User0', 'User2'])):
         print(u)
+    # -------------------------------------
+
+    habits = list()
+    for i in range(5):
+        users[0].habits.append(Habit(title='smoking', reward='some reward'))
+
+    session.commit()
+    #
+    user = session.query(User).filter(User.name == 'mhr').one()
+    print(user.habits)
+
+    user.habits[2] = Habit(title="tea", reward="another reward")
+    print(user.habits)
+    session.commit()
