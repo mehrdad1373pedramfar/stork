@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship, query, aliased
+from sqlalchemy.orm import relationship, aliased
 
 from sapractice.config import base, create_session, metadata
 
