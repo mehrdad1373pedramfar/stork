@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from sapractice.config import base, create_session, metadata
@@ -31,32 +31,20 @@ class Person(base):
 
 
 class Admin(Person):
-    __tablename__ = 'admin'
-
-    id = Column(Integer, ForeignKey('person.id'), primary_key=True)
-
     __mapper_args__ = {
-        'polymorphic_identity':  __tablename__,
+        'polymorphic_identity':  'admin'
     }
 
 
 class Doctor(Person):
-    __tablename__ = 'doctor'
-
-    id = Column(Integer, ForeignKey('person.id'), primary_key=True)
-
     __mapper_args__ = {
-        'polymorphic_identity':  __tablename__,
+        'polymorphic_identity':  'doctor'
     }
 
 
 class Patient(Person):
-    __tablename__ = 'patient'
-
-    id = Column(Integer, ForeignKey('person.id'), primary_key=True)
-
     __mapper_args__ = {
-        'polymorphic_identity':  __tablename__,
+        'polymorphic_identity':  'patient'
     }
 
 
