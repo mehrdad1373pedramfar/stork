@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
-from sqlalchemy.orm import relationship, query, aliased
+from sqlalchemy.orm import relationship, query, aliased, synonym
 
 from sapractice.config import base, create_session, metadata
 
@@ -17,6 +17,8 @@ class Book(base):
     title = Column(String)
 
     authors = relationship('Author', secondary=author_books, back_populates='books', lazy='dynamic')
+
+    name = synonym('title')
 
     def __init__(self, title):
         self.title = title
@@ -57,5 +59,8 @@ if __name__ == '__main__':
 
     for b in book.authors[0].books:
         print(b)
+
+    for b in book.authors[0].books:
+        print(b.name)
 
     session.commit()

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DDL
 from sqlalchemy.orm import relationship, aliased
 
 from sapractice.config import base, create_session, metadata
@@ -32,7 +32,7 @@ class Habit(base):
 
 
 if __name__ == '__main__':
-    session = create_session()
+    session = create_session
     metadata.create_all()
     users = list()
     for i in range(10):
