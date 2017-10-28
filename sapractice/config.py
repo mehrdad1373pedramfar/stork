@@ -17,4 +17,3 @@ engine = create_engine(f'sqlite:///{DATA_DIRECTORY}/quiz.sqlite', echo=True)
 create_session = scoped_session(sessionmaker(bind=engine, autoflush=False))
 base = declarative_base(bind=engine)
 metadata = base.metadata
-

@@ -9,8 +9,8 @@ class Person(base):
     __tablename__ = 'person'
 
     id = Column(Integer, primary_key=True)
-    _first_name = Column(String)
-    _last_name = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
     role = Column(String)
 
     __mapper_args__ = {
@@ -20,14 +20,14 @@ class Person(base):
 
     @hybrid_property
     def name(self):
-        return self._first_name + ' - ' + self._last_name
+        return self.first_name + ' ' + self.last_name
 
     @name.setter
     def name(self, name):
-        self._first_name, self._last_name = name.split(' ')
+        self.first_name, self.last_name = name.split(' ')
 
     def __repr__(self):
-        return f'{self.id} {self.name} ({self.role})'
+        return f'{self.id} {self.first_name} - {self.last_name} ({self.role})'
 
 
 class Admin(Person):
@@ -56,14 +56,14 @@ if __name__ == '__main__':
     session.commit()
 
     print('Doctors: ')
-    for d in session.query(Doctor).all():
+    for d in session.query(Doctor):
         print(d)
 
     print('Persons: ')
-    for p in session.query(Person).all():
+    for p in session.query(Person):
         print(p)
 
-    doc = session.query(Doctor).filter(Doctor.name == 'mehrdad - pedramfar').one_or_none()
+    doc = session.query(Doctor).filter(Doctor.name == 'mehrdad pedramfar').one_or_none()
     print(doc)
-    per = session.query(Person).filter(Person.name == 'armin - ayari').one_or_none()
+    per = session.query(Person).filter(Person.name == 'armin ayari').one_or_none()
     print(per)
